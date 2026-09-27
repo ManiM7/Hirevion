@@ -7,7 +7,7 @@ import Spinner from '../../components/Spinner';
 import { STATUS_LABELS, STATUS_BADGE_CLASS, formatSlot, detectTimezone } from '../../utils/connectionStatus';
 
 function emptySlot() {
-  return { date: '', startTime: '', endTime: '', timezone: detectTimezone() };
+  return { date: '', startTime: '', timezone: detectTimezone() };
 }
 
 export default function CandidateConnectionDetail() {
@@ -113,7 +113,7 @@ export default function CandidateConnectionDetail() {
       {connection.status === 'pending' && !showDecline && (
         <form className="card" style={{ marginTop: 24 }} onSubmit={handleSubmitAvailability}>
           <h3>Provide your availability</h3>
-          <p>Add one or more time slots when you could interview. The recruiter will confirm one.</p>
+          <p>Add one or more times when you could interview (each interview is 1 hour). The recruiter will confirm one.</p>
 
           {slots.map((slot, i) => (
             <div className="slot-row" key={i}>
@@ -122,12 +122,8 @@ export default function CandidateConnectionDetail() {
                 <input type="date" required value={slot.date} onChange={updateSlot(i, 'date')} />
               </div>
               <div className="field" style={{ marginBottom: 0 }}>
-                <label>Start time</label>
+                <label>Time</label>
                 <input type="time" required value={slot.startTime} onChange={updateSlot(i, 'startTime')} />
-              </div>
-              <div className="field" style={{ marginBottom: 0 }}>
-                <label>End time</label>
-                <input type="time" required value={slot.endTime} onChange={updateSlot(i, 'endTime')} />
               </div>
               <div className="field" style={{ marginBottom: 0 }}>
                 <label>Time zone</label>

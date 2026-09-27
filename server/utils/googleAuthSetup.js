@@ -56,7 +56,7 @@ async function main() {
       res.end(
         error
           ? `<h2>Authorization failed: ${error}</h2><p>Close this tab and check the terminal.</p>`
-          : '<h2>Hirevia: Google account connected — you can close this tab.</h2>'
+          : '<h2>Hirevion: Google account connected — you can close this tab.</h2>'
       );
       if (error) reject(new Error(error));
       else if (code) resolve(code);

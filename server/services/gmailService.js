@@ -28,7 +28,7 @@ function encodeSubject(subject) {
 
 /** Builds a base64url-encoded multipart/alternative RFC 2822 message, as the Gmail API's `raw` field requires. */
 function buildRawMessage({ from, to, subject, html, text }) {
-  const boundary = `hirevia_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const boundary = `hirevion_${Date.now()}_${Math.random().toString(36).slice(2)}`;
   const lines = [
     `From: ${from}`,
     `To: ${to}`,

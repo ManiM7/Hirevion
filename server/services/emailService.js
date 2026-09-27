@@ -61,10 +61,10 @@ async function sendMail({ to, subject, html, text }) {
 
 async function sendTemporaryPasswordEmail({ to, fullName, temporaryPassword }) {
   const loginUrl = `${clientUrl}/login`;
-  const subject = 'Your Hirevia account has been created';
+  const subject = 'Your Hirevion account has been created';
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 480px; margin: auto;">
-      <h2>Welcome to Hirevia, ${fullName}</h2>
+      <h2>Welcome to Hirevion, ${fullName}</h2>
       <p>Your account has been created successfully.</p>
       <p><strong>Temporary password:</strong></p>
       <p style="font-size: 18px; font-family: monospace; background: #f3f4f6; padding: 12px; border-radius: 6px;">${temporaryPassword}</p>
@@ -72,21 +72,21 @@ async function sendTemporaryPasswordEmail({ to, fullName, temporaryPassword }) {
       <p>You must change this temporary password after your first login.</p>
     </div>
   `;
-  const text = `Welcome to Hirevia, ${fullName}.\n\nYour temporary password: ${temporaryPassword}\nLogin: ${loginUrl}\n\nYou must change this temporary password after your first login.`;
+  const text = `Welcome to Hirevion, ${fullName}.\n\nYour temporary password: ${temporaryPassword}\nLogin: ${loginUrl}\n\nYou must change this temporary password after your first login.`;
   await sendMail({ to, subject, html, text });
 }
 
 async function sendPasswordChangedEmail({ to, fullName }) {
-  const subject = 'Your Hirevia password was changed';
+  const subject = 'Your Hirevion password was changed';
   const html = `<div style="font-family: Arial, sans-serif; max-width: 480px; margin: auto;">
       <h2>Hi ${fullName},</h2>
-      <p>Your Hirevia account password was changed successfully. If this wasn't you, contact support immediately.</p>
+      <p>Your Hirevion account password was changed successfully. If this wasn't you, contact support immediately.</p>
     </div>`;
-  await sendMail({ to, subject, html, text: `Hi ${fullName}, your Hirevia password was changed successfully.` });
+  await sendMail({ to, subject, html, text: `Hi ${fullName}, your Hirevion password was changed successfully.` });
 }
 
 async function sendPasswordResetEmail({ to, resetUrl }) {
-  const subject = 'Reset your Hirevia password';
+  const subject = 'Reset your Hirevion password';
   const html = `<div style="font-family: Arial, sans-serif; max-width: 480px; margin: auto;">
       <h2>Password reset requested</h2>
       <p>Click the link below to set a new password. This link expires in 15 minutes.</p>

@@ -12,7 +12,7 @@ export default function Landing() {
       <header className="landing-nav">
         <div className="landing-nav-inner">
           <div className="auth-logo">
-            <span className="dot" /> Hirevia
+            <span className="dot" /> Hirevion
           </div>
           <nav className="landing-nav-links">
             <Link to="/login">Log in</Link>
@@ -26,7 +26,7 @@ export default function Landing() {
       <section className="landing-hero">
         <h1>Build your profile. Prove your skills. Get discovered.</h1>
         <p>
-          Hirevia connects job seekers with MNCs, startups, and hiring teams through real resume analysis,
+          Hirevion connects job seekers with MNCs, startups, and hiring teams through real resume analysis,
           adaptive skill assessments, and verified candidate data — no guesswork.
         </p>
         <div className="landing-cta-row">
@@ -112,7 +112,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <footer className="landing-footer">© {new Date().getFullYear()} Hirevia</footer>
+      <footer className="landing-footer">© {new Date().getFullYear()} Hirevion</footer>
     </div>
   );
 }

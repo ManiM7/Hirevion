@@ -100,7 +100,7 @@ function categoryFor(q) {
 }
 
 async function seedAdmin() {
-  const email = (process.env.ADMIN_EMAIL || 'admin@hirevia.local').toLowerCase();
+  const email = (process.env.ADMIN_EMAIL || 'admin@hirevion.local').toLowerCase();
   const existing = await User.findOne({ email });
   if (existing) {
     console.log(`[seed] admin already exists: ${email}`);

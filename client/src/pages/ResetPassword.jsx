@@ -50,7 +50,7 @@ export default function ResetPassword() {
     <div className="auth-shell">
       <div className="auth-card">
         <div className="auth-logo">
-          <span className="dot" /> Hirevia
+          <span className="dot" /> Hirevion
         </div>
         <div className="card">
           <h2>Reset your password</h2>

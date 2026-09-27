@@ -122,7 +122,7 @@ export default function Register() {
     <div className="auth-shell">
       <div className="auth-card wide">
         <div className="auth-logo">
-          <span className="dot" /> Hirevia
+          <span className="dot" /> Hirevion
         </div>
         <div className="card">
           <div className="role-toggle">

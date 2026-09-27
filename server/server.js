@@ -14,7 +14,7 @@ const { port } = require('./config/env');
 (async () => {
   await connectDB();
   app.listen(port, () => {
-    console.log(`[server] Hirevia API listening on port ${port}`);
+    console.log(`[server] Hirevion API listening on port ${port}`);
   });
 })();
 

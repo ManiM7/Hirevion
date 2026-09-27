@@ -22,7 +22,7 @@ module.exports = {
     secure: process.env.SMTP_SECURE === 'true',
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
-    from: process.env.SMTP_FROM || 'Hirevia <no-reply@hirevia.local>',
+    from: process.env.SMTP_FROM || 'Hirevion <no-reply@hirevion.local>',
   },
 
   // Many cloud hosts (Render's containers among them) block outbound SMTP

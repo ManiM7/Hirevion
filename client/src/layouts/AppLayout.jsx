@@ -42,7 +42,7 @@ export default function AppLayout() {
       <div className={`sidebar-overlay ${mobileOpen ? 'open' : ''}`} onClick={() => setMobileOpen(false)} />
       <aside className={`sidebar ${mobileOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <span className="dot" /> Hirevia
+          <span className="dot" /> Hirevion
         </div>
         <nav className="sidebar-nav">
           {items.map((item) => (

@@ -1,8 +1,8 @@
 {
-  "name": "hirevia",
+  "name": "hirevion",
   "version": "1.0.0",
   "private": true,
-  "description": "Hirevia - bridge between candidates and recruiters/companies",
+  "description": "Hirevion - bridge between candidates and recruiters/companies",
   "scripts": {
     "dev": "concurrently -n server,client -c green,cyan \"npm run server\" \"npm run client\"",
     "server": "npm run dev --prefix server",

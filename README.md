@@ -1,6 +1,6 @@
-# Hirevia
+# Hirevion
 
-Hirevia connects candidates with recruiters/companies through real resume ATS
+Hirevion connects candidates with recruiters/companies through real resume ATS
 analysis, adaptive skill assessments, and server-side candidate search — no mock
 data, no fake scores.
 
@@ -38,7 +38,7 @@ data, no fake scores.
 ## Architecture
 
 ```
-hirevia/
+hirevion/
 ├── client/               React (Vite) SPA
 │   └── src/
 │       ├── components/   Reusable UI (ProtectedRoute, Spinner)

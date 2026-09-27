@@ -8,6 +8,13 @@ const { logActivity } = require('./activityService');
 const googleMeetService = require('./googleMeetService');
 
 const ACTIVE_STATUSES_FOR_DUPLICATE_CHECK = ['pending', 'availability_submitted', 'scheduled'];
+const INTERVIEW_DURATION_MINUTES = 60;
+
+// Candidates pick a single time; the stored end time is derived from a fixed interview length.
+function endTimeFor(startTime) {
+  const start = DateTime.fromFormat(String(startTime || ''), 'HH:mm');
+  return start.isValid ? start.plus({ minutes: INTERVIEW_DURATION_MINUTES }).toFormat('HH:mm') : '';
+}
 
 async function notify(userId, type, title, message, metadata = {}) {
   await Notification.create({ user: userId, type, title, message, metadata });
@@ -41,13 +48,14 @@ function slotToInstants(slot) {
   }
 
   const start = DateTime.fromISO(`${slot.date}T${slot.startTime}`, { zone: slot.timezone });
-  const end = DateTime.fromISO(`${slot.date}T${slot.endTime}`, { zone: slot.timezone });
+  let end = DateTime.fromISO(`${slot.date}T${slot.endTime}`, { zone: slot.timezone });
 
   if (!start.isValid || !end.isValid) {
     throw new ApiError(422, 'Invalid date/time value');
   }
+  // A slot starting late in the evening ends after midnight, on the next day.
   if (end <= start) {
-    throw new ApiError(422, 'End time must be after start time');
+    end = end.plus({ days: 1 });
   }
   if (start < DateTime.now()) {
     throw new ApiError(422, 'Cannot schedule a slot in the past');
@@ -127,15 +135,17 @@ async function submitAvailability(connectionId, candidateProfile, slots, candida
     throw new ApiError(422, 'Provide at most 10 time slots');
   }
 
-  // Validate every slot up front (throws on the first invalid one).
-  slots.forEach(slotToInstants);
-
-  connection.availabilitySlots = slots.map((s) => ({
+  const normalizedSlots = slots.map((s) => ({
     date: s.date,
     startTime: s.startTime,
-    endTime: s.endTime,
+    endTime: endTimeFor(s.startTime),
     timezone: s.timezone,
   }));
+
+  // Validate every slot up front (throws on the first invalid one).
+  normalizedSlots.forEach(slotToInstants);
+
+  connection.availabilitySlots = normalizedSlots;
   connection.candidateMessage = candidateMessage || '';
   connection.status = 'availability_submitted';
   await connection.save();
@@ -220,7 +230,7 @@ async function scheduleInterview(connectionId, recruiterProfile, slotId, title) 
 
   const meeting = await googleMeetService.createMeetingEvent({
     summary: meetingTitle,
-    description: `Interview scheduled via Hirevia between ${candidateProfile.fullName} (candidate) and ${recruiterFull.fullName} (recruiter)${recruiterFull.company ? ` at ${recruiterFull.company.name}` : ''}.`,
+    description: `Interview scheduled via Hirevion between ${candidateProfile.fullName} (candidate) and ${recruiterFull.fullName} (recruiter)${recruiterFull.company ? ` at ${recruiterFull.company.name}` : ''}.`,
     startAt: new Date(startAt),
     endAt: new Date(endAt),
     timezone: slot.timezone,
