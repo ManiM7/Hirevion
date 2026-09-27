@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import PageLoader from '../components/PageLoader';
 
 const NAV_ITEMS = {
   candidate: [
@@ -75,7 +76,9 @@ export default function AppLayout() {
           </div>
         </header>
         <main className="content-area">
-          <Outlet />
+          <Suspense fallback={<PageLoader />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

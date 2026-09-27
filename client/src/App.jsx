@@ -1,46 +1,50 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import PageLoader from './components/PageLoader';
 import AppLayout from './layouts/AppLayout';
 
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ChangePassword from './pages/ChangePassword';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import NotFound from './pages/NotFound';
-import Notifications from './pages/Notifications';
 
-import CandidateDashboard from './pages/candidate/Dashboard';
-import CandidateProfile from './pages/candidate/Profile';
-import CandidateResume from './pages/candidate/Resume';
-import AssessmentStart from './pages/candidate/AssessmentStart';
-import AssessmentTake from './pages/candidate/AssessmentTake';
-import AssessmentResult from './pages/candidate/AssessmentResult';
-import CandidateProgress from './pages/candidate/Progress';
-import CandidateSettings from './pages/candidate/Settings';
-import InterviewStart from './pages/candidate/InterviewStart';
-import InterviewTake from './pages/candidate/InterviewTake';
-import InterviewResult from './pages/candidate/InterviewResult';
-import CandidateConnections from './pages/candidate/Connections';
-import CandidateConnectionDetail from './pages/candidate/ConnectionDetail';
+// Everything past the entry pages is split into per-page chunks, downloaded on first visit.
+const ChangePassword = lazy(() => import('./pages/ChangePassword'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const Notifications = lazy(() => import('./pages/Notifications'));
 
-import RecruiterDashboard from './pages/recruiter/Dashboard';
-import RecruiterCandidates from './pages/recruiter/Candidates';
-import RecruiterCandidateDetail from './pages/recruiter/CandidateDetail';
-import RecruiterCompany from './pages/recruiter/Company';
-import RecruiterProfilePage from './pages/recruiter/Profile';
-import RecruiterSettings from './pages/recruiter/Settings';
-import RecruiterConnections from './pages/recruiter/Connections';
-import RecruiterConnectionDetail from './pages/recruiter/ConnectionDetail';
+const CandidateDashboard = lazy(() => import('./pages/candidate/Dashboard'));
+const CandidateProfile = lazy(() => import('./pages/candidate/Profile'));
+const CandidateResume = lazy(() => import('./pages/candidate/Resume'));
+const AssessmentStart = lazy(() => import('./pages/candidate/AssessmentStart'));
+const AssessmentTake = lazy(() => import('./pages/candidate/AssessmentTake'));
+const AssessmentResult = lazy(() => import('./pages/candidate/AssessmentResult'));
+const CandidateProgress = lazy(() => import('./pages/candidate/Progress'));
+const CandidateSettings = lazy(() => import('./pages/candidate/Settings'));
+const InterviewStart = lazy(() => import('./pages/candidate/InterviewStart'));
+const InterviewTake = lazy(() => import('./pages/candidate/InterviewTake'));
+const InterviewResult = lazy(() => import('./pages/candidate/InterviewResult'));
+const CandidateConnections = lazy(() => import('./pages/candidate/Connections'));
+const CandidateConnectionDetail = lazy(() => import('./pages/candidate/ConnectionDetail'));
 
-import AdminDashboard from './pages/admin/Dashboard';
-import AdminUsers from './pages/admin/Users';
-import AdminQuestions from './pages/admin/Questions';
-import AdminAssessments from './pages/admin/Assessments';
-import AdminCompanies from './pages/admin/Companies';
+const RecruiterDashboard = lazy(() => import('./pages/recruiter/Dashboard'));
+const RecruiterCandidates = lazy(() => import('./pages/recruiter/Candidates'));
+const RecruiterCandidateDetail = lazy(() => import('./pages/recruiter/CandidateDetail'));
+const RecruiterCompany = lazy(() => import('./pages/recruiter/Company'));
+const RecruiterProfilePage = lazy(() => import('./pages/recruiter/Profile'));
+const RecruiterSettings = lazy(() => import('./pages/recruiter/Settings'));
+const RecruiterConnections = lazy(() => import('./pages/recruiter/Connections'));
+const RecruiterConnectionDetail = lazy(() => import('./pages/recruiter/ConnectionDetail'));
+
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
+const AdminUsers = lazy(() => import('./pages/admin/Users'));
+const AdminQuestions = lazy(() => import('./pages/admin/Questions'));
+const AdminAssessments = lazy(() => import('./pages/admin/Assessments'));
+const AdminCompanies = lazy(() => import('./pages/admin/Companies'));
 
 function RoleHome() {
   const { user } = useAuth();
@@ -52,6 +56,7 @@ export default function App() {
   return (
     <ToastProvider>
       <AuthProvider>
+        <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -113,6 +118,7 @@ export default function App() {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </AuthProvider>
     </ToastProvider>
   );

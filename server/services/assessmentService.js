@@ -205,11 +205,16 @@ async function startAssessment(candidateProfile, requestedSkills) {
   // stated area of interest / career objective / certifications, even if
   // those skills weren't explicitly detected on the resume, plus always
   // consider the skill-independent Aptitude category.
-  let certificationsText = '';
-  if (candidateProfile.resume) {
-    const resume = await Resume.findById(candidateProfile.resume).select('parsed.certifications');
-    certificationsText = (resume?.parsed?.certifications || []).join(' ');
-  }
+  // Cross-attempt history: every question ever served to this candidate in
+  // any earlier attempt (there is no in_progress one at this point — see
+  // the guard above) is excluded for the life of this attempt too, so
+  // nothing repeats across separate assessment attempts. Fetched alongside
+  // the resume since the two lookups are independent.
+  const [resume, priorHistoryQuestionIds] = await Promise.all([
+    candidateProfile.resume ? Resume.findById(candidateProfile.resume).select('parsed.certifications') : null,
+    AssessmentAttempt.find({ candidate: candidateProfile._id }).distinct('askedQuestionIds'),
+  ]);
+  const certificationsText = (resume?.parsed?.certifications || []).join(' ');
   const interestText = [candidateProfile.areaOfInterest, candidateProfile.careerObjective, certificationsText]
     .filter(Boolean)
     .join(' ');
@@ -235,14 +240,6 @@ async function startAssessment(candidateProfile, requestedSkills) {
   const totalQuestions = Math.min(skills.length * QUESTIONS_PER_SKILL, MAX_TOTAL_QUESTIONS);
   const skillState = {};
   for (const skill of skills) skillState[skill] = initialSkillState();
-
-  // Cross-attempt history: every question ever served to this candidate in
-  // any earlier attempt (there is no in_progress one at this point — see
-  // the guard above) is excluded for the life of this attempt too, so
-  // nothing repeats across separate assessment attempts.
-  const priorHistoryQuestionIds = await AssessmentAttempt.find({ candidate: candidateProfile._id }).distinct(
-    'askedQuestionIds'
-  );
 
   const attempt = await AssessmentAttempt.create({
     candidate: candidateProfile._id,
@@ -289,8 +286,10 @@ async function startAssessment(candidateProfile, requestedSkills) {
   attempt.askedQuestionIds.push(question._id);
   await attempt.save();
 
-  const user = await CandidateProfile.findById(candidateProfile._id).select('user');
-  await logActivity(user.user, 'ASSESSMENT_STARTED', { attemptId: attempt._id, skills });
+  await logActivity(candidateProfile.user?._id || candidateProfile.user, 'ASSESSMENT_STARTED', {
+    attemptId: attempt._id,
+    skills,
+  });
 
   return {
     attempt,

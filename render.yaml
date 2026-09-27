@@ -1,7 +1,9 @@
 services:
   - type: web
-    name: hirevia-api
+    name: hirevion-api
     runtime: node
+    # Closest Render region to the MongoDB Atlas cluster (AWS Mumbai, ap-south-1).
+    region: singapore
     rootDir: server
     plan: free
     buildCommand: npm install

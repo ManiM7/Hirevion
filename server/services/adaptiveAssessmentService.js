@@ -84,7 +84,10 @@ async function selectNextQuestion({ skill, difficulty, excludeIds }) {
 
     if (candidates.length > 0) {
       const chosen = candidates[Math.floor(Math.random() * candidates.length)];
-      await Question.updateOne({ _id: chosen._id }, { $inc: { timesServed: 1 } });
+      // Variety counter only — not awaited, so it doesn't add a database round trip to every question.
+      Question.updateOne({ _id: chosen._id }, { $inc: { timesServed: 1 } }).catch((err) =>
+        console.error('[assessment] timesServed update failed:', err.message)
+      );
       return chosen;
     }
   }
